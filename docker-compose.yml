@@ -16,8 +16,8 @@ services:
       - DB_PASSWORD=journal
       - DB_SCHEMA=journal
       - DEBUG_MODE=true
-      - USERNAME=bogdan
-      - PASSWORD=_dec0d3D.doc
+      - USERNAME=defaultuser
+      - PASSWORD=defaultpassword
       - EMAIL_ADDRESS=bogdan.radu@b4it.ro
     networks:
       - journal-net
