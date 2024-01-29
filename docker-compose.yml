@@ -1,0 +1,51 @@
+version: '2.3'
+
+networks:
+  journal-net:
+    external: true
+
+services:
+  journal:
+    image: bradu
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    environment:
+      - DB_HOST=mariadb
+      - DB_USERNAME=journal
+      - DB_PASSWORD=journal
+      - DB_SCHEMA=journal
+      - DEBUG_MODE=true
+      - USERNAME=bogdan
+      - PASSWORD=_dec0d3D.doc
+      - EMAIL_ADDRESS=bogdan.radu@b4it.ro
+    networks:
+      - journal-net
+
+  mariadb:
+    image: mariadb
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=yes
+      - MARIADB_USER=journal
+      - MARIADB_PASSWORD=journal
+      - MARIADB_DATABASE=journal
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - journal-net
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ~/nginx/conf.d:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - journal
+    networks:
+      - journal-net
+
+volumes:
+  db_data:
